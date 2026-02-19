@@ -33,39 +33,42 @@ function App() {
 
     setHabits([
       ...habits,
-      { id: Date.now(), name: input, done: false, streak: 0, lastDone: null },
+      {
+        id: Date.now(),
+        name: input,
+        streak: 0,
+        lastCompleted: null,
+      },
     ]);
 
     setInput("");
   };
 
-  function toggleHabit(id) {
+
+  const toggleHabit = (id) => {
     const today = new Date().toDateString();
 
     setHabits((prev) =>
       prev.map((habit) => {
         if (habit.id !== id) return habit;
 
-        // if already done today → undo
-        if (habit.lastDone === today && habit.done) {
-          return {
-            ...habit,
-            done: false,
-            streak: Math.max(0, habit.streak - 1),
-            lastDone: null,
-          };
+        if (habit.lastCompleted === today) {
+          return habit; // already completed today
         }
 
-        // otherwise mark done today
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const wasYesterday = habit.lastCompleted === yesterday.toDateString();
+
         return {
           ...habit,
-          done: true,
-          streak: habit.streak + 1,
-          lastDone: today,
+          streak: wasYesterday ? habit.streak + 1 : 1,
+          lastCompleted: today,
         };
       })
     );
-  }
+  };
+
 
 
 
@@ -74,12 +77,19 @@ function App() {
   };
 
   const resetStreak = (id) => {
-    setHabits(
-      habits.map((h) =>
-        h.id === id ? { ...h, streak: 0, done: false } : h
+    setHabits((prev) =>
+      prev.map((habit) =>
+        habit.id === id
+          ? {
+              ...habit,
+              streak: 0,
+              lastCompleted: null,   
+            }
+          : habit
       )
     );
   };
+
 
   return (
     <div className="app">
