@@ -10,6 +10,8 @@ function App() {
   });
 
   const [input, setInput] = useState("");
+  const [category, setCategory] = useState("Morning");
+
 
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
@@ -36,9 +38,11 @@ function App() {
       {
         id: Date.now(),
         name: input,
+        category: category, 
         streak: 0,
-        lastCompleted: null,
-      },
+        lastCompleted: null
+      }
+
     ]);
 
     setInput("");
@@ -90,20 +94,57 @@ function App() {
     );
   };
 
+  const presets = {
+    morning: ["Drink water", "Stretch", "Breathe 5 min", "Gratitude"],
+    midday: ["Walk 5 min", "Posture reset", "Eye rest"],
+    evening: ["Journal", "No phone 30 min", "Stretch"]
+  };
+
+  function addPreset(type) {
+    const newHabits = presets[type].map(name => ({
+      id: Date.now() + Math.random(),
+      name,
+      done: false,
+      streak: 0,
+      category:
+        type === "morning" ? "Morning" :
+        type === "midday" ? "Midday" :
+        "Evening"
+    }));
+
+  setHabits(prev => [...prev, ...newHabits]);
+  }
 
   return (
     <div className="app">
       <div className="left">
-        <h1>Habit Tracker</h1>
+        <h1>Evia Flow - Daily Flow</h1>
 
         <div className="add-habit">
-          <input
-            type="text"
-            placeholder="Add a habit..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <button onClick={addHabit}>Add</button>
+          {/* ONE ROW: input + select + add */}
+          <div className="add-row">
+            <input
+              type="text"
+              placeholder="Add a ritual (meditate, stretch, hydrate...)"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="Morning">🌅 Morning</option>
+              <option value="Midday">🌤 Midday</option>
+              <option value="Evening">🌙 Evening</option>
+            </select>
+
+            <button onClick={addHabit}>Add</button>
+          </div>
+
+          {/* SECOND ROW: presets under the input row */}
+          <div className="presets">
+            <button onClick={() => addPreset("morning")}>🌅 Morning Reset</button>
+            <button onClick={() => addPreset("midday")}>🌤 Midday Reset</button>
+            <button onClick={() => addPreset("evening")}>🌙 Evening Grounding</button>
+          </div>
         </div>
 
         <HabitList

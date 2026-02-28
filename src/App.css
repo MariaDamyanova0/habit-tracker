@@ -2,11 +2,23 @@
   min-height: 100vh;
   background: #0b0b10;
   color: #f1f1f1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 16px;
+
+  display: grid;
+  grid-template-columns: 1fr 320px; /* left + stats */
+  gap: 40px;
+
+  align-items: start; /* keeps stats at top */
+  padding: 40px 60px;
   font-family: system-ui, sans-serif;
+}
+
+.left {
+  width: 100%;
+}
+
+.right {
+  position: sticky;
+  top: 40px;
 }
 
 h1 {
@@ -102,4 +114,175 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.group {
+  margin-bottom: 24px;
+}
+
+.group h3 {
+  margin-bottom: 8px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.add-habit select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: inherit;
+}
+
+.add-habit {
+  position: relative;
+  z-index: 5;
+}
+
+.stats-card {
+  position: relative;
+  z-index: 1;
+}
+
+.left {
+  padding-right: 40px;
+}
+
+.add-habit select {
+  background-color: #0f0f14;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.add-habit option {
+  background-color: #0f0f14;
+  color: white;
+}
+
+.presets {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 20px;
+}
+
+.presets button {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.presets button:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.add-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.presets {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.presets button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.presets button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.add-habit { flex-direction: column; }
+
+.add-habit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.add-habit input,
+.add-habit select,
+.add-habit button {
+  height: 40px;
+  font-size: 14px;
+}
+
+.presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.presets button {
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.left {
+  max-width: 520px;   /* prevents overlapping Stats */
+  width: 100%;
+}
+
+.add-habit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.add-habit input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.add-habit select {
+  min-width: 130px;
+}
+
+.add-habit button {
+  white-space: nowrap;
+}
+
+.presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.app {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.left {
+  flex: 1;
+  min-width: 0; 
+}
+
+.habit-list {
+  width: 100%;
+}
+
+.habit-list li {
+  width: 100%;
+  box-sizing: border-box;
 }
