@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import HabitList from "./components/HabitList";
+import Stats from "./components/Stats";
+import EnergyPanel from "./components/EnergyPanel";
 
 function App() {
   // Load habits from localStorage
@@ -190,71 +192,18 @@ function App() {
       </div>
 
       <div className="right">
-        <h2>Stats</h2>
-
-        <div className="stats-card">
-          <h1 className="completion">{completionRate}%</h1>
-          <p className="subtitle">Completed Today</p>
-
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${completionRate}%` }}
-            ></div>
-          </div>
-
-          <p>Total habits: {totalHabits}</p>
-          <p>Completed: {completedHabits}</p>
-          <p>
-
-            {habits.length
-              ? Math.max(...habits.map((h) => h.streak))
-              : 0}
-          </p>
-        </div>
+        <Stats habits={habits} />
 
         <div className="energy-panel">
 
           <h3>Daily Energy</h3>
 
-          <div className="mood-options">
-            {["🔥", "😊", "😌", "🥱"].map((m) => (
-              <button
-                key={m}
-                className={mood === m ? "active" : ""}
-                onClick={() => setMood(m)}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-          <div className="reflection-questions">
-
-            <label>✨ What felt aligned today?</label>
-            <textarea
-              value={reflection.aligned}
-              onChange={(e) =>
-                setReflection({ ...reflection, aligned: e.target.value })
-              }
-            />
-
-            <label>🌊 What drained my energy?</label>
-            <textarea
-              value={reflection.drained}
-              onChange={(e) =>
-                setReflection({ ...reflection, drained: e.target.value })
-              }
-            />
-
-            <label>🌙 One intention for tomorrow</label>
-            <textarea
-              value={reflection.intention}
-              onChange={(e) =>
-                setReflection({ ...reflection, intention: e.target.value })
-              }
-            />
-
-          </div>
+          <EnergyPanel
+            mood={mood}
+            setMood={setMood}
+            reflection={reflection}
+            setReflection={setReflection}
+          />
 
         </div>
       </div>
