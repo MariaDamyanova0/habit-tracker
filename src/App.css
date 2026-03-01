@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+button, textarea, input, select {
+  transition: all 0.2s ease;
+}
+
 .app {
   min-height: 100vh;
   width: 100%;
@@ -12,13 +20,12 @@
 }
 
 .left {
-  width: 65%;
-  max-width: 900px;
+  max-width: 800px;
 }
 
 .right {
-  width: 32%;
-  min-width: 300px;
+  flex: 1;
+  min-width: 320px;
 }
 
 h1 {
@@ -86,10 +93,11 @@ h1 {
 }
 
 .stats-card {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  padding: 24px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 .habit-actions {
@@ -328,17 +336,18 @@ h1 {
   background: linear-gradient(90deg, #4ade80, #22d3ee);
 }
 
-.energy-panel textarea {
-  width: 100%;
-  min-height: 80px;
-  background: rgba(255,255,255,0.06);
-  border: none;
-  border-radius: 12px;
-  padding: 10px;
-  color: white;
-  resize: none;
+.energy-panel {
+  margin-top: 30px;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  
 }
 
+.energy-panel {
+  width: 100%;
+  box-sizing: border-box;
+}
 .reflection-questions {
   display: flex;
   flex-direction: column;
@@ -359,4 +368,26 @@ h1 {
   padding: 10px;
   color: white;
   resize: none;
+}
+
+.completion {
+  font-size: 42px;
+  margin: 0;
+}
+
+.subtitle {
+  opacity: 0.6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.mood-options {
+  display: flex;
+  gap: 12px;
+}
+
+.mood-options button {
+  padding: 10px 14px;
+  font-size: 20px;
+  border-radius: 12px;
 }

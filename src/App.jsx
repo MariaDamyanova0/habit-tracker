@@ -64,7 +64,6 @@ function App() {
         name: input,
         category,
         done: false,
-        streak: 0,
         lastDone: null,
       },
     ]);
@@ -75,22 +74,20 @@ function App() {
   // Toggle habit
   const toggleHabit = (id) => {
     const today = new Date().toDateString();
-    
-    setHabits((prev) =>
-      prev.map((habit) =>
-        habit.id === id
-          ? {
-              ...habit,
-              done: habit.lastDone === today ? false : true,
-              streak:
-                habit.lastDone === today
-                  ? habit.streak
-                  : habit.streak + 1,
-              lastDone:
-                habit.lastDone === today ? habit.lastDone : today,
-            }
-          : habit
-      )
+
+    setHabits(prev =>
+      prev.map(habit => {
+        if (habit.id !== id) return habit;
+
+        const isCompleting = !habit.done;
+
+        return {
+          ...habit,
+          done: isCompleting,
+          lastDone: isCompleting ? today : null,
+          streak: isCompleting ? 1 : 0   // 👈 THIS LINE FIXES YOUR BUG
+        };
+      })
     );
   };
 
@@ -196,7 +193,8 @@ function App() {
         <h2>Stats</h2>
 
         <div className="stats-card">
-          <p><strong>{completionRate}% Complete Today</strong></p>
+          <h1 className="completion">{completionRate}%</h1>
+          <p className="subtitle">Completed Today</p>
 
           <div className="progress-bar">
             <div
@@ -208,7 +206,7 @@ function App() {
           <p>Total habits: {totalHabits}</p>
           <p>Completed: {completedHabits}</p>
           <p>
-            Best streak:{" "}
+
             {habits.length
               ? Math.max(...habits.map((h) => h.streak))
               : 0}
@@ -219,13 +217,17 @@ function App() {
 
           <h3>Daily Energy</h3>
 
-          <div className="mood-selector">
-            <button onClick={() => setMood("🔥")} className={mood === "🔥" ? "active" : ""}>🔥</button>
-            <button onClick={() => setMood("😊")} className={mood === "😊" ? "active" : ""}>😊</button>
-            <button onClick={() => setMood("😌")} className={mood === "😌" ? "active" : ""}>😌</button>
-            <button onClick={() => setMood("😴")} className={mood === "😴" ? "active" : ""}>😴</button>
+          <div className="mood-options">
+            {["🔥", "😊", "😌", "🥱"].map((m) => (
+              <button
+                key={m}
+                className={mood === m ? "active" : ""}
+                onClick={() => setMood(m)}
+              >
+                {m}
+              </button>
+            ))}
           </div>
-
           <div className="reflection-questions">
 
             <label>✨ What felt aligned today?</label>
