@@ -75,19 +75,37 @@ function App() {
 
   // Toggle habit
   const toggleHabit = (id) => {
-    const today = new Date().toDateString();
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
 
     setHabits(prev =>
       prev.map(habit => {
         if (habit.id !== id) return habit;
 
-        const isCompleting = !habit.done;
+        // If unchecking
+        if (habit.done) {
+          return {
+            ...habit,
+            done: false
+          };
+        }
+
+        // If completing today
+        let newStreak = 1;
+
+        if (habit.lastDone === yesterdayStr) {
+          newStreak = habit.streak + 1;
+        }
 
         return {
           ...habit,
-          done: isCompleting,
-          lastDone: isCompleting ? today : null,
-          streak: isCompleting ? 1 : 0   // 👈 THIS LINE FIXES YOUR BUG
+          done: true,
+          lastDone: todayStr,
+          streak: newStreak
         };
       })
     );
