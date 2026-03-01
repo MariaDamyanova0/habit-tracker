@@ -1,24 +1,24 @@
 .app {
   min-height: 100vh;
+  width: 100%;
   background: #0b0b10;
   color: #f1f1f1;
-
-  display: grid;
-  grid-template-columns: 1fr 320px; /* left + stats */
-  gap: 40px;
-
-  align-items: start; /* keeps stats at top */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
   padding: 40px 60px;
   font-family: system-ui, sans-serif;
 }
 
 .left {
-  width: 100%;
+  width: 65%;
+  max-width: 900px;
 }
 
 .right {
-  position: sticky;
-  top: 40px;
+  width: 32%;
+  min-width: 300px;
 }
 
 h1 {
@@ -285,4 +285,78 @@ h1 {
 .habit-list li {
   width: 100%;
   box-sizing: border-box;
+}
+
+.progress-bar {
+  height: 10px;
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  margin: 10px 0 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
+  transition: width 0.3s ease;
+}
+
+.energy-panel {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+}
+
+.mood-selector {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.mood-selector button {
+  font-size: 20px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.mood-selector button.active {
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
+}
+
+.energy-panel textarea {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  color: white;
+  resize: none;
+}
+
+.reflection-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reflection-questions label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.reflection-questions textarea {
+  width: 100%;
+  min-height: 60px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  color: white;
+  resize: none;
 }

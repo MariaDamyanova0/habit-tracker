@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import HabitInput from "./components/HabitInput";
 import HabitList from "./components/HabitList";
 
 function App() {
+  // Load habits from localStorage
   const [habits, setHabits] = useState(() => {
     const saved = localStorage.getItem("habits");
     return saved ? JSON.parse(saved) : [];
@@ -12,11 +12,35 @@ function App() {
   const [input, setInput] = useState("");
   const [category, setCategory] = useState("Morning");
 
+  const [mood, setMood] = useState(() => {
+    return localStorage.getItem("mood") || "";
+  });
 
+  const [reflection, setReflection] = useState(() => {
+    const saved = localStorage.getItem("reflection");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          aligned: "",
+          drained: "",
+          intention: "",
+        };
+  });
+
+  // Save habits to localStorage
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
   }, [habits]);
+  
+  useEffect(() => {
+    localStorage.setItem("mood", mood);
+  }, [mood]);
 
+  useEffect(() => {
+    localStorage.setItem("reflection", JSON.stringify(reflection));
+  }, [reflection]);
+
+  // Daily reset logic
   useEffect(() => {
     const today = new Date().toDateString();
 
@@ -29,7 +53,7 @@ function App() {
     );
   }, []);
 
-
+  // Add habit
   const addHabit = () => {
     if (!input.trim()) return;
 
@@ -38,113 +62,126 @@ function App() {
       {
         id: Date.now(),
         name: input,
-        category: category, 
+        category,
+        done: false,
         streak: 0,
-        lastCompleted: null
-      }
-
+        lastDone: null,
+      },
     ]);
 
     setInput("");
   };
 
-
+  // Toggle habit
   const toggleHabit = (id) => {
     const today = new Date().toDateString();
-
-    setHabits((prev) =>
-      prev.map((habit) => {
-        if (habit.id !== id) return habit;
-
-        if (habit.lastCompleted === today) {
-          return habit; // already completed today
-        }
-
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const wasYesterday = habit.lastCompleted === yesterday.toDateString();
-
-        return {
-          ...habit,
-          streak: wasYesterday ? habit.streak + 1 : 1,
-          lastCompleted: today,
-        };
-      })
-    );
-  };
-
-
-
-
-  const deleteHabit = (id) => {
-    setHabits(habits.filter((h) => h.id !== id));
-  };
-
-  const resetStreak = (id) => {
+    
     setHabits((prev) =>
       prev.map((habit) =>
         habit.id === id
           ? {
               ...habit,
-              streak: 0,
-              lastCompleted: null,   
+              done: habit.lastDone === today ? false : true,
+              streak:
+                habit.lastDone === today
+                  ? habit.streak
+                  : habit.streak + 1,
+              lastDone:
+                habit.lastDone === today ? habit.lastDone : today,
             }
           : habit
       )
     );
   };
 
-  const presets = {
-    morning: ["Drink water", "Stretch", "Breathe 5 min", "Gratitude"],
-    midday: ["Walk 5 min", "Posture reset", "Eye rest"],
-    evening: ["Journal", "No phone 30 min", "Stretch"]
+  // Delete habit
+  const deleteHabit = (id) => {
+    setHabits(habits.filter((h) => h.id !== id));
   };
 
-  function addPreset(type) {
-    const newHabits = presets[type].map(name => ({
-      id: Date.now() + Math.random(),
-      name,
-      done: false,
-      streak: 0,
-      category:
-        type === "morning" ? "Morning" :
-        type === "midday" ? "Midday" :
-        "Evening"
-    }));
+  // Reset streak
+  const resetStreak = (id) => {
+    setHabits(
+      habits.map((h) =>
+        h.id === id
+          ? { ...h, streak: 0, done: false }
+          : h
+      )
+    );
+  };
+  
+  const addPreset = (type) => {
+  const presetHabits = {
+    morning: ["Hydrate", "Gratitude", "Stretch"],
+    midday: ["Walk", "Read 10 pages"],
+    evening: ["Reflect", "Meditate"],
+  };
 
-  setHabits(prev => [...prev, ...newHabits]);
-  }
+  const selected = presetHabits[type];
 
+  const newHabits = selected.map((name) => ({
+    id: Date.now() + Math.random(),
+    name,
+    category:
+      type === "morning"
+        ? "Morning"
+        : type === "midday"
+        ? "Midday"
+        : "Evening",
+    done: false,
+    streak: 0,
+    lastDone: null,
+  }));
+
+  setHabits((prev) => [...prev, ...newHabits]);
+};
+  // -------- STATS LOGIC (CORRECT PLACE) --------
+  const totalHabits = habits.length;
+  const completedHabits = habits.filter((h) => h.done).length;
+
+  const completionRate =
+    totalHabits === 0
+      ? 0
+      : Math.round((completedHabits / totalHabits) * 100);
+
+  // -------- RENDER --------
   return (
     <div className="app">
       <div className="left">
         <h1>Evia Flow - Daily Flow</h1>
 
         <div className="add-habit">
-          {/* ONE ROW: input + select + add */}
-          <div className="add-row">
-            <input
-              type="text"
-              placeholder="Add a ritual (meditate, stretch, hydrate...)"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Add a ritual (meditate, stretch, hydrate...)"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+        
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="Morning">🌅 Morning</option>
+            <option value="Midday">🌤 Midday</option>
+            <option value="Evening">🌙 Evening</option>
+          </select>
 
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="Morning">🌅 Morning</option>
-              <option value="Midday">🌤 Midday</option>
-              <option value="Evening">🌙 Evening</option>
-            </select>
+          <button onClick={addHabit}>Add</button>
+        </div>
+        
+        <div className="presets">
+          <button onClick={() => addPreset("morning")}>
+            🌅 Morning Reset
+          </button>
 
-            <button onClick={addHabit}>Add</button>
-          </div>
+          <button onClick={() => addPreset("midday")}>
+            🌤 Midday Reset
+          </button>
 
-          {/* SECOND ROW: presets under the input row */}
-          <div className="presets">
-            <button onClick={() => addPreset("morning")}>🌅 Morning Reset</button>
-            <button onClick={() => addPreset("midday")}>🌤 Midday Reset</button>
-            <button onClick={() => addPreset("evening")}>🌙 Evening Grounding</button>
-          </div>
+          <button onClick={() => addPreset("evening")}>
+            🌙 Evening Grounding
+          </button>
         </div>
 
         <HabitList
@@ -159,14 +196,64 @@ function App() {
         <h2>Stats</h2>
 
         <div className="stats-card">
-          <p>Total habits: {habits.length}</p>
-          <p>Completed: {habits.filter((h) => h.done).length}</p>
+          <p><strong>{completionRate}% Complete Today</strong></p>
+
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${completionRate}%` }}
+            ></div>
+          </div>
+
+          <p>Total habits: {totalHabits}</p>
+          <p>Completed: {completedHabits}</p>
           <p>
             Best streak:{" "}
             {habits.length
               ? Math.max(...habits.map((h) => h.streak))
               : 0}
           </p>
+        </div>
+
+        <div className="energy-panel">
+
+          <h3>Daily Energy</h3>
+
+          <div className="mood-selector">
+            <button onClick={() => setMood("🔥")} className={mood === "🔥" ? "active" : ""}>🔥</button>
+            <button onClick={() => setMood("😊")} className={mood === "😊" ? "active" : ""}>😊</button>
+            <button onClick={() => setMood("😌")} className={mood === "😌" ? "active" : ""}>😌</button>
+            <button onClick={() => setMood("😴")} className={mood === "😴" ? "active" : ""}>😴</button>
+          </div>
+
+          <div className="reflection-questions">
+
+            <label>✨ What felt aligned today?</label>
+            <textarea
+              value={reflection.aligned}
+              onChange={(e) =>
+                setReflection({ ...reflection, aligned: e.target.value })
+              }
+            />
+
+            <label>🌊 What drained my energy?</label>
+            <textarea
+              value={reflection.drained}
+              onChange={(e) =>
+                setReflection({ ...reflection, drained: e.target.value })
+              }
+            />
+
+            <label>🌙 One intention for tomorrow</label>
+            <textarea
+              value={reflection.intention}
+              onChange={(e) =>
+                setReflection({ ...reflection, intention: e.target.value })
+              }
+            />
+
+          </div>
+
         </div>
       </div>
     </div>
