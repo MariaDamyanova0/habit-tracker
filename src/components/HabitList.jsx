@@ -1,4 +1,13 @@
 function HabitList({ habits, onToggle, onDelete, onReset }) {
+  if (habits.length === 0) {
+    return (
+      <div className="empty-state">
+        <h3>✨ Start Your Flow</h3>
+        <p>Add your first ritual to begin your day.</p>
+      </div>
+    );
+  }
+
   const today = new Date().toDateString();
 
   const groups = {

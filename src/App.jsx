@@ -128,30 +128,40 @@ function App() {
   };
   
   const addPreset = (type) => {
-  const presetHabits = {
-    morning: ["Hydrate", "Gratitude", "Stretch"],
-    midday: ["Walk", "Read 10 pages"],
-    evening: ["Reflect", "Meditate"],
+    const presetHabits = {
+      morning: ["Hydrate", "Gratitude", "Stretch"],
+      midday: ["Walk", "Read 10 pages"],
+      evening: ["Reflect", "Meditate"],
+    };
+
+    const selected = presetHabits[type];
+
+    setHabits((prev) => {
+      const existingNames = prev.map((h) => h.name);
+
+      const filtered = selected.filter(
+        (name) => !existingNames.includes(name)
+      );
+
+      const newHabits = filtered.map((name) => ({
+        id: Date.now() + Math.random(),
+        name,
+        category:
+          type === "morning"
+            ? "Morning"
+            : type === "midday"
+            ? "Midday"
+            : "Evening",
+        done: false,
+        streak: 0,
+        lastDone: null,
+      }));
+
+      return [...prev, ...newHabits];
+    });
   };
 
-  const selected = presetHabits[type];
 
-  const newHabits = selected.map((name) => ({
-    id: Date.now() + Math.random(),
-    name,
-    category:
-      type === "morning"
-        ? "Morning"
-        : type === "midday"
-        ? "Midday"
-        : "Evening",
-    done: false,
-    streak: 0,
-    lastDone: null,
-  }));
-
-  setHabits((prev) => [...prev, ...newHabits]);
-};
   // -------- STATS LOGIC (CORRECT PLACE) --------
   const totalHabits = habits.length;
   const completedHabits = habits.filter((h) => h.done).length;
@@ -227,6 +237,7 @@ function App() {
       </div>
     </div>
   );
+
 }
 
 export default App;
