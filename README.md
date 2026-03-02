@@ -1,11 +1,11 @@
-# 🌿 Evia Flow – Daily Habit & Energy Tracker
+# 🌿 Evia Flow - Daily Habit & Energy Tracker
 
 Evia Flow is a minimal, responsive habit tracking application built with React.  
 It helps users build consistency through daily rituals, streak tracking, and weekly progress insights.
 
 ---
 
-## ✨ Features
+##  Features
 
 - ✅ Add custom habits by category (Morning, Midday, Evening)
 - 🔥 Real streak logic with consecutive-day tracking
@@ -29,7 +29,7 @@ It helps users build consistency through daily rituals, streak tracking, and wee
 
 ## 🚀 Live Demo
 
-habit-tracker-qum0kazyo-mdamyanova3535-7240s-projects.vercel.app
+https://evia-flow.vercel.app
 
 
 ## 🛠 Installation
