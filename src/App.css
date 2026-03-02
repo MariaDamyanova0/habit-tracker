@@ -439,3 +439,29 @@ h1 {
   margin-bottom: 10px;
   font-weight: 600;
 }
+
+.weekly-percentage {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.weekly-progress-bar {
+  height: 8px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.weekly-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
+  transition: width 0.3s ease;
+}
+
+.weekly-details {
+  opacity: 0.7;
+  font-size: 14px;
+}

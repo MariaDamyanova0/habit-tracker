@@ -33,11 +33,24 @@ const weeklyRate =
         <p className="subtitle">Completed Today</p>
         
         <div className="weekly-card">
-          <h3>This Week</h3>
-          <p>Completed habits: {weeklyCompleted}</p>
-          <p>Weekly consistency: {weeklyRate}%</p>
+          <h3>📅 This Week</h3>
+
+          <div className="weekly-percentage">
+            {weeklyRate}%
+          </div>
+
+          <div className="weekly-progress-bar">
+            <div
+              className="weekly-progress-fill"
+              style={{ width: `${weeklyRate}%` }}
+            ></div>
+          </div>
+
+           <p className="weekly-details">
+            {weeklyCompleted} habits completed
+          </p>
         </div> 
-        
+
         <div className="progress-bar">
           <div
             className="progress-fill"
